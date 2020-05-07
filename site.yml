@@ -1,0 +1,10 @@
+---
+- hosts: web
+  remote_user: koyote
+  become: yes
+
+  roles:
+  - common
+  - web
+  - db 
+  - wp-cli

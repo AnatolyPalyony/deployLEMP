@@ -1,0 +1,28 @@
+---
+# tasks file for db
+- name: Install python docker pip modules
+  pip: name={{ item }} state=latest
+  with_items:
+  - PyMySQL 
+
+- name: Install SQL
+  apt: 
+   name: ['mysql-server','mysql-client','python-mysqldb']
+   state: latest
+  notify: restart mysql
+
+- name: Create DB
+  mysql_db:
+   name: '{{ db_name }}'
+   state: present
+   login_unix_socket: /var/run/mysqld/mysqld.sock
+
+- name: Create user for db
+  mysql_user:
+   name: '{{ db_user }}'
+   password: '{{ db_pass }}'
+   encrypted: yes
+   priv: '{{ db_name }}.*:ALL'
+   state: present
+   login_unix_socket: /var/run/mysqld/mysqld.sock
+   

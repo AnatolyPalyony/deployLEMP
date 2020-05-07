@@ -1,0 +1,36 @@
+---
+- name: Install nginx
+  apt:
+   name: nginx
+   state: latest
+
+
+- name: Install PHP fpm
+  apt:
+   name: ['php{{ php_version }}','php{{ php_version }}-fpm','php{{ php_version }}-common','php{{ php_version }}-cli','php{{ php_version }}-curl']
+   state: latest
+
+- name: Configure php.ini
+  blockinfile:
+   dest: /etc/php/{{ php_version }}/fpm/php.ini
+   block: |
+      cgi-fix_pathinfo = 0
+   backup: yes
+  notify: restart php-fpm
+
+- name: Create Nginx Virtual Host
+  template: 
+   src: vhost.j2
+   dest: /etc/nginx/sites-enabled/vhost-{{ domain_name }}
+  notify: restart nginx
+
+- name: Create web-root dir
+  file:
+   path: /var/www/{{ domain_name }}
+   state: directory
+
+- name: Upload index.html and info.php
+  template: 
+   src: index.php.j2
+   dest: /var/www/{{ domain_name }}/index.php
+

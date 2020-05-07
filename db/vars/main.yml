@@ -1,0 +1,5 @@
+---
+# vars file for db
+db_name: wordpress-db
+db_user: wpuser
+db_pass: '*2345B53BAEC13FA20FBD2936C3D3F4CCDBBF7AFB'

@@ -1,0 +1,17 @@
+---
+# tasks file for common
+- name: Update repository and Upgrade packages
+  apt:
+    update_cache: yes
+
+- name: Install packages
+  apt:
+    name: "{{ item }}"
+    state: present
+    update_cache: yes
+  with_items:
+  - python
+  - python3-pip
+  - git-core
+  - redis-server
+  - curl
